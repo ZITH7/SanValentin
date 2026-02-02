@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Ella ❤️</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:'Comic Sans MS','Segoe UI',system-ui,sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:url('Hello Kitty x Batman.jpg') center/cover no-repeat fixed;
+      color:#ff4f9a;
+      overflow-x:hidden;
+    }
+
+    section{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:40px 20px;
+      text-align:center;
+      position:relative;
+      backdrop-filter: blur(4px);
+    }
+
+    .hidden{display:none}
+
+    .card{
+      background: rgba(255,255,255,0.8);
+      border-radius:30px;
+      padding:35px;
+      max-width:560px;
+      box-shadow:0 25px 50px rgba(255,105,180,0.35);
+      animation:fadeUp 1.4s ease;
+      border:4px solid #ff9acb;
+    }
+
+    button{
+      border:none;
+      border-radius:30px;
+      padding:14px 30px;
+      font-size:1rem;
+      cursor:pointer;
+      background:#ff6fb1;
+      color:#fff;
+      margin:8px;
+    }
+
+    .counter{
+      position:absolute;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:.9rem;
+      background:#fff;
+      padding:6px 14px;
+      border-radius:20px;
+    }
+
+    .lock{
+      position:fixed;
+      inset:0;
+      background:rgba(255,214,232,0.95);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:20;
+    }
+
+    .heart{
+      position:fixed;
+      bottom:-20px;
+      font-size:34px;
+      animation:floatUp linear forwards;
+      opacity:0.9;
+    }
+
+    @keyframes floatUp{
+      to{
+        transform:translateY(-110vh);
+        opacity:0;
+      }
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(30px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+  </style>
+</head>
+<body>
+
+<!-- BLOQUEO -->
+<div class="lock" id="lock">
+  <div class="card">
+    <h1>Ey preciosa</h1>
+    <p>Tú, la que me tiene pensando día y noche</p>
+    <p>Hay algo que te quiero mostrar</p>
+    <button onclick="unlock()">Entra Entra</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="Eyedress & Dent May - Something About You.mp3" type="audio/mpeg">
+</audio>
+
+<!-- SECCIÓN 1 -->
+<section id="s1">
+  <div class="counter">⏳ <span id="days">0</span> días desde que te conocí</div>
+  <div class="card">
+    <h1>Cómo empezó todo para mí</h1>
+    <p>Bueno, ya sabemos cómo empezó todo, ese día, esa noche.</p>
+    <p>Desde que te conocí sentí una chispa, aunque no le tenía fe ni a que fuéramos amigos.</p>
+    <p>Pero me encantaba cada que hablaba contigo, y eso hizo que te volvieras alguien especial para mí.</p>
+    <button onclick="nextSection(2)">Tocame preciosa</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 2 -->
+<section class="hidden" id="s2">
+  <div class="card">
+    <p>Sabes, te volviste tan especial para mí que un mensaje tuyo me alegraba el día, aunque no me lo creas jaja.</p>
+    <button onclick="nextSection(3)">Seguir</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 3 -->
+<section class="hidden" id="s3">
+  <div class="card">
+    <p>Y sin darme cuenta ya me importabas mucho.</p>
+    <p>Aunque en las primeras semanas te volviste distante, eso me dolía mucho, y ya iba a dejarte de hablar, pero algo me decía que me quedara.</p>
+    <button onclick="nextSection(4)">Seguir</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 4 -->
+<section class="hidden" id="s4">
+  <div class="card">
+    <p>Y menos mal me quedé, porque gracias a eso ahora eres mi dulce novia.</p>
+    <button onclick="nextSection(5)">Seguir</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 5 -->
+<section class="hidden" id="s5">
+  <div class="card">
+    <p>Bueno mi niña hermosa, ya casi llegamos al final, pero antes quiero que sepas lo mucho que te amo y lo importante que eres para mí.</p>
+    <p>Te amo por quien eres, por tu forma de ser, por cómo sin darme cuenta te fuiste volviendo parte de mis días.</p>
+    <p>Gracias por llegar a mi vida y por estar a mi lado, porque desde que estás aquí todo se siente diferente y mejor.</p>
+    <button onclick="nextSection(6)">Seguir</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 6 -->
+<section class="hidden" id="s6">
+  <div class="card" id="finalCard">
+    <h2>Bueno, llegamos al final y solo me queda hacerte una pregunta</h2>
+    <h1>¿Quieres ser mi San Valentín? ❤️</h1>
+    <button onclick="yes()">Sí 💖</button>
+    <button onclick="no()">No 🙃</button>
+  </div>
+</section>
+
+<!-- SECCIÓN 7 -->
+<section class="hidden" id="s7">
+  <div class="card" id="loveTexts"></div>
+</section>
+
+<script>
+  const music = document.getElementById('bgMusic');
+  let noCount = 0;
+  let firstYes = false;
+
+  function unlock(){
+    document.getElementById('lock').style.display='none';
+    music.play();
+    startCounter();
+  }
+
+  function startCounter(){
+    const start = new Date('2025-11-01');
+    setInterval(()=>{
+      const now = new Date();
+      document.getElementById('days').innerText = Math.floor((now - start) / (1000*60*60*24));
+    },1000);
+  }
+
+  function nextSection(n){
+    document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
+    const target = document.getElementById('s'+n);
+    if(target){
+      target.classList.remove('hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+
+  function yes(){
+    if(!firstYes){
+      firstYes = true;
+    }
+    document.getElementById('finalCard').innerHTML = `
+      <h2>Gracias por compartir este San Valentín conmigo ❤️</h2>
+      <p>Prometo estar contigo hasta donde tú me lo permitas.</p>
+      <p>Espero este San Valentín sea el primero de muchos 💕</p>
+      <button onclick="goFinal()">Final</button>
+    `;
+  }
+
+  function goFinal(){
+    if(firstYes){
+      nextSection(7);
+      startHearts();
+    }
+  }
+
+  function no(){
+    noCount++;
+    const card = document.getElementById('finalCard');
+    if(noCount === 1){
+      card.innerHTML = `<h2>¿Estás segura baby? 😼</h2><button onclick='yes()'>Sí 💖</button><button onclick='no()'>No 🙃</button>`;
+    }else{
+      card.innerHTML = `<h2>Aceptarás por las buenas o por las malas 😈💘</h2><button onclick='yes()'>Sí 💖</button><button onclick='yes()'>Sí 💗</button>`;
+    }
+  }
+
+  function startHearts(){
+    const texts = [
+      'Eres única','Eres perfecta','Eres la belleza misma','Eres más que suficiente',
+      'Te amo mucho','Eres todo lo que necesito','Mi cachetona hermosa','¿Ya te dije que te amo?'
+    ];
+    let i = 0;
+
+    setInterval(()=>{
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = '❤️';
+      heart.style.left = Math.random()*100 + 'vw';
+      heart.style.animationDuration = 6 + Math.random()*4 + 's';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),9000);
+    },900);
+
+    const textInterval = setInterval(()=>{
+      if(i < texts.length){
+        document.getElementById('loveTexts').innerHTML = `<h1>${texts[i]}</h1>`;
+        i++;
+      }else{
+        clearInterval(textInterval);
+      }
+    },2500);
+  }
+</script>
+
+</body>
+</html>
+
